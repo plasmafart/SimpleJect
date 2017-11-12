@@ -70,6 +70,11 @@ namespace SimpleJect
 
         private void Main_Load(object sender, EventArgs e)
         {
+
+            //Centering Github link label
+
+            linkLabel1.Left = (this.ClientSize.Width - linkLabel1.Size.Width) / 2;
+
             this.CenterToScreen();
             dialog.Title = "Select a file.";
             dialog.Filter = "(DLL FIles)|*.dll|All files (*.*)|*.*";
