@@ -51,8 +51,7 @@ namespace SimpleJect
                 IntPtr procHandle = OpenProcess(PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_VM_READ, false, process.Id);
                 IntPtr loadLibraryAddr = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
                 IntPtr allocMemAddress = VirtualAllocEx(procHandle, IntPtr.Zero, (uint)((file.Length + 1) * Marshal.SizeOf(typeof(char))), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-                UIntPtr bytesWritten;
-                WriteProcessMemory(procHandle, allocMemAddress, Encoding.Default.GetBytes(file), (uint)((file.Length + 1) * Marshal.SizeOf(typeof(char))), out bytesWritten);
+                WriteProcessMemory(procHandle, allocMemAddress, Encoding.Default.GetBytes(file), (uint)((file.Length + 1) * Marshal.SizeOf(typeof(char))), out UIntPtr bytesWritten);
                 CreateRemoteThread(procHandle, IntPtr.Zero, 0, loadLibraryAddr, allocMemAddress, 0, IntPtr.Zero);
                 InjectionSuccess = true;
             }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SimpleJect;
 
 namespace SimpleJect
 {
@@ -19,6 +20,7 @@ namespace SimpleJect
         private Point offset;
         private Point _normalWindowLocation = Point.Empty;
         /*=======================*/
+        static bool FirstRun = false;
         static OpenFileDialog dialog = new OpenFileDialog();
         static string selectedFilePath = null;
         static Process strProc = null;
@@ -35,9 +37,11 @@ namespace SimpleJect
             {
                 isTopPanelDragged = true;
                 Point pointStartPosition = this.PointToScreen(new Point(e.X, e.Y));
-                offset = new Point();
-                offset.X = this.Location.X - pointStartPosition.X;
-                offset.Y = this.Location.Y - pointStartPosition.Y;
+                offset = new Point
+                {
+                    X = this.Location.X - pointStartPosition.X,
+                    Y = this.Location.Y - pointStartPosition.Y
+                };
             }
             else
                 isTopPanelDragged = false;
@@ -58,8 +62,9 @@ namespace SimpleJect
             isTopPanelDragged = false;
         }
 
-        private void btnExit_Click(object sender, EventArgs e)
+        private void BtnExit_Click(object sender, EventArgs e)
         {
+            notifyIcon.Dispose();
             Environment.Exit(0);
         }
 
@@ -68,11 +73,23 @@ namespace SimpleJect
             this.CenterToScreen();
             dialog.Title = "Select a file.";
             dialog.Filter = "(DLL FIles)|*.dll|All files (*.*)|*.*";
+            notifyIcon.Icon = Properties.Resources.logo;
             if (!File.Exists(Config.cfgPath))
+            {
                 File.Create(Config.cfgPath).Close();
+                FirstRun = true;
+            }
 
             try
             {
+                SimpleJect.Update.CheckForUpdate(); // Check for update
+                if (!SimpleJect.Update.IsCorrectVersion)
+                    ShowBalloonTip("SimpleJect Updater", "You are using an outdated version of SimpleJect! Please check the discord server for any new updates. Click me to join server!", 30000, notifyIcon);
+                else { ShowBalloonTip("SimpleJect Updater", $"No new updates found.\nCurrent injector version {SimpleJect.Update.appVers}", 2000, notifyIcon); }
+                notifyIcon.BalloonTipClicked += OpenBrowser; 
+
+                if (FirstRun)
+                    ShowBalloonTip($"Welcome to SimpleJect!", $"SimpleJect by AVexxed#1602 | Build {SimpleJect.Update.appVers}", 2000, notifyIcon);
                 txtProc.Text = Config.ReadConfig(1);
                 selectedFilePath = Config.ReadConfig(2);
                 txtDll.Text = Path.GetFileName(selectedFilePath);
@@ -80,27 +97,53 @@ namespace SimpleJect
             catch { return; }
         }
 
-        private void btnSelect_Click(object sender, EventArgs e)
+        private void BtnSelect_Click(object sender, EventArgs e)
         {
             dialog.ShowDialog();
             selectedFilePath = dialog.FileName;
             txtDll.Text = Path.GetFileName(selectedFilePath);
         }
 
-        private void btnInject_Click(object sender, EventArgs e)
+        static void OpenBrowser(object sender, EventArgs e)
         {
+            Process.Start("https://discord.io/SimpleJect");
+        }
+
+        private void BtnInject_Click(object sender, EventArgs e)
+        {
+            string cutStr = null;
+            if (txtProc.Text.Contains(".exe"))
+                cutStr = txtProc.Text.Trim(new Char[] { '.', 'e', 'x', 'e' });
+            else
+                cutStr = txtProc.Text;
+
             Injection.InjectionSuccess = false;
-            try { strProc = Process.GetProcessesByName(txtProc.Text)[0]; }
-            catch { MessageBox.Show("Invalid process."); }
+            try {                  
+                strProc = Process.GetProcessesByName(cutStr)[0];
+            }
+            catch {
+                ShowBalloonTip("SimpleJect", "Invalid process.", 2000, notifyIcon);
+                return;
+            }
             Injection.Inject(strProc, selectedFilePath);
             if (Injection.InjectionSuccess)
             {
-                MessageBox.Show("Success!");
-                Config.SaveConfig($"{strProc.ProcessName}", selectedFilePath);
+                ShowBalloonTip("SimpleJect", "Injection has succeeded!", 2000, notifyIcon);
+                Config.SaveConfig($"{strProc.ProcessName}", selectedFilePath, null);
                 return;
             }
             else
-            { MessageBox.Show("Injection failed, check your inputs."); return; }
+            {
+                ShowBalloonTip("SimpleJect", "Injection failed, check your inputs.", 2000, notifyIcon);
+                return;
+            }
+        }
+
+        public static void ShowBalloonTip(string title, string message, int timeout, NotifyIcon icon)
+        {
+            icon.BalloonTipTitle = title;
+            icon.BalloonTipText = message;
+            icon.ShowBalloonTip(timeout);
         }
     }
 }

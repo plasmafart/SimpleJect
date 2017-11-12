@@ -11,13 +11,23 @@ namespace SimpleJect
     class Config
     {
         public static string cfgPath = $@"{Application.StartupPath}\SimpleJect.cfg";
-        public static void SaveConfig(string line1, string line2)
+        public static void SaveConfig(string line1, string line2, string line3)
         {
-            /*don't ask*/
-            string contents = @"";
-            contents += $@"{line1}" + Environment.NewLine;
-            contents += $@"{line2}" + Environment.NewLine;
-            File.WriteAllText($@"{cfgPath}", $@"{contents}");
+            string contents = "";
+            contents += line1 + Environment.NewLine;
+            contents += line2 + Environment.NewLine;
+            contents += line3 + Environment.NewLine;
+            File.WriteAllText(cfgPath, contents);
+        }
+
+        public static bool ReadBool(string input)
+        {
+            if (input == "true")
+                return true;
+            else if (input == "false")
+                return false;
+            else
+                return false;
         }
 
         public static string ReadConfig(int line)

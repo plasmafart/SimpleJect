@@ -8,3 +8,12 @@ C:\Users\Justo7\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\obj\
 C:\Users\Justo7\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\obj\Release\SimpleJect.exe
 C:\Users\Justo7\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\obj\Release\SimpleJect.pdb
 C:\Users\Justo7\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\obj\Release\SimpleJect.csprojResolveAssemblyReference.cache
+C:\Users\Justin\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\bin\Release\SimpleJect.exe.config
+C:\Users\Justin\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\bin\Release\SimpleJect.exe
+C:\Users\Justin\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\bin\Release\SimpleJect.pdb
+C:\Users\Justin\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\obj\Release\SimpleJect.Main.resources
+C:\Users\Justin\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\obj\Release\SimpleJect.Properties.Resources.resources
+C:\Users\Justin\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\obj\Release\SimpleJect.csproj.GenerateResource.Cache
+C:\Users\Justin\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\obj\Release\SimpleJect.csproj.CoreCompileInputs.cache
+C:\Users\Justin\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\obj\Release\SimpleJect.exe
+C:\Users\Justin\Documents\Visual Studio 2017\Projects\SimpleJect\SimpleJect\obj\Release\SimpleJect.pdb
